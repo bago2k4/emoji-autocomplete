@@ -1,6 +1,6 @@
 {
   "name": "@bago2k4/emoji-autocomplete",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Uses textcomplete to show a list of suggestions using the EmojiMart index.",
   "main": "index.js",
   "scripts": {
