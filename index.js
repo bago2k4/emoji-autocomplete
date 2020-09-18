@@ -1,6 +1,7 @@
 import {default as $} from "jquery";
 import {emojiIndex} from "emoji-mart";
-import {default as textcomplete} from "textcomplete";
+import {Textcomplete, Editor} from "textcomplete";
+
 
 function createHTMLUnicode(unicode){
   return "&#x"+unicode+";"
@@ -14,9 +15,13 @@ function unicodeChar(unicode){
   }
 }
 
-function emojiAutocomplete(selector) {
-    var sel = selector || ".emoji-autocomplete";
-    $(sel).textcomplete([ {
+function emojiAutocomplete(el) {
+    var elEditor = new Editor(el);
+    var txtComplete = new Textcomplete(elEditor);
+    console.log("DBG EmojiAutocxomplete for element:", el);
+    console.log("DBG   elEditor:", elEditor);
+    console.log("DBG   txtComplete:", txtComplete);
+    txtComplete.register([ {
             match: /\B:([\-+\w]{1,30})$/,
             search: function (term, callback) {
                 callback(emojiIndex.search(term));
