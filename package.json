@@ -1,0 +1,29 @@
+{
+  "name": "@bago2k4/emoji-autocomplete",
+  "version": "1.0.0",
+  "description": "Uses textcomplete to show a list of suggestions using the EmojiMart index.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/bago2k4/emoji-autocomplete"
+  },
+  "keywords": [
+    "emoji",
+    "autocomplete",
+    "emojiAutocomplete",
+    "emoji-autocomplete",
+    "textcomplete",
+    "emojimart",
+    "emoji-mart"
+  ],
+  "author": "Iacopo Carraro",
+  "license": "MIT",
+  "dependencies": {
+    "emoji-mart": "^2.2.1",
+    "jquery": "^2.1.4",
+    "textcomplete": "^0.18.2"
+  }
+}
