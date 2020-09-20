@@ -1,5 +1,6 @@
-import {default as $} from "jquery-textcomplete";
+import {default as $} from "jquery";
 import {emojiIndex} from "emoji-mart";
+import "jquery-textcomplete";
 
 
 function createHTMLUnicode(unicode){
