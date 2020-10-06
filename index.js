@@ -15,9 +15,10 @@ function unicodeChar(unicode){
   }
 }
 
-function emojiAutocomplete(el) {
-  if (el.nodeType === Node.ELEMENT_NODE) {
-    $(el).textcomplete([ {
+function emojiAutocomplete(elementOrSelector) {
+  if (typeof elementOrSelectorel === "string" ||
+      (elementOrSelector && elementOrSelector.nodeType && elementOrSelector.nodeType === Node.ELEMENT_NODE)) {
+    $(elementOrSelector).textcomplete([ {
         match: /\B:([\-+\w]{1,30})$/,
         search: function (term, callback) {
           callback(emojiIndex.search(term));
