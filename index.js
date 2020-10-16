@@ -1,6 +1,8 @@
-import {default as $} from "jquery";
+
 import {emojiIndex} from "emoji-mart";
-import "jquery-textcomplete";
+
+import ContentEditable from "@textcomplete/contenteditable";
+import {Textcomplete} from "textcomplete";
 
 
 function createHTMLUnicode(unicode){
@@ -15,49 +17,104 @@ function unicodeChar(unicode){
   }
 }
 
-function emojiAutocomplete(elementOrSelector) {
-  if (typeof elementOrSelectorel === "string" ||
-      (elementOrSelector && elementOrSelector.nodeType && elementOrSelector.nodeType === Node.ELEMENT_NODE)) {
-    $(elementOrSelector).textcomplete([ {
-        match: /\B:([\-+\w]{1,30})$/,
-        search: function (term, callback) {
-          callback(emojiIndex.search(term));
-        },
-        unicodeFromShortname: function(shortname){
-          return emojiIndex.emojis[shortname].unified;
-        },
-        imageTemplate: function(unicode){
-          return unicodeChar(unicode);
-        },
-        SVGImageFromShortname: function(shortname){
-          return emojiIndex.emojis[shortname].unified;
-        },
-        PNGImageFromShortname: function(shortname){
-          var unicode = this.unicodeFromShortname(shortname);
-          return this.imageTemplate(unicode);
-        },
-        template: function (emoji) {
-          // Load emoji images one by one
-          return emoji.native +' '+emoji.colons;
-        },
-        replace: function (emoji) {
-          var unicode = emoji.unified;
-          return this.imageTemplate(unicode);
-        },
-        index: 1
-      }
-      ],{
-        zIndex: 1136,
-        maxCount: 20
-      })
-    .on({'textComplete:select': function (e, value, strategy) {
-      // This will make sure React inputs receive a change event
-      // after the textcompletion has inserted new contents
-      var event = new Event('input', { bubbles: true });
-      strategy.el.dispatchEvent(event);
-      }
-    })
-  }
+function emojiAutocompleteInner(editors) {
+  editors.forEach(editor => {
+    var textComplete = new Textcomplete(editor);
+    textComplete.register([{
+      match: /\B:([\-+\w]{1,30})$/,
+      search: function (term, callback) {
+        callback(emojiIndex.search(term));
+      },
+      unicodeFromShortname: function(shortname){
+        return emojiIndex.emojis[shortname].unified;
+      },
+      imageTemplate: function(unicode){
+        return unicodeChar(unicode);
+      },
+      SVGImageFromShortname: function(shortname){
+        return emojiIndex.emojis[shortname].unified;
+      },
+      PNGImageFromShortname: function(shortname){
+        var unicode = this.unicodeFromShortname(shortname);
+        return this.imageTemplate(unicode);
+      },
+      template: function (emoji) {
+        // Load emoji images one by one
+        return emoji.native +' '+emoji.colons;
+      },
+      replace: function (emoji) {
+        var unicode = emoji.unified;
+        return this.imageTemplate(unicode);
+      },
+      index: 1
+    }],
+    {
+      zIndex: 1136,
+      maxCount: 20
+    });
+  });
+
+
+  // if (typeof elementOrSelectorel === "string" ||
+  //     (elementOrSelector && elementOrSelector.nodeType && elementOrSelector.nodeType === Node.ELEMENT_NODE)) {
+  //   $(elementOrSelector).textcomplete([ {
+  //       match: /\B:([\-+\w]{1,30})$/,
+  //       search: function (term, callback) {
+  //         callback(emojiIndex.search(term));
+  //       },
+  //       unicodeFromShortname: function(shortname){
+  //         return emojiIndex.emojis[shortname].unified;
+  //       },
+  //       imageTemplate: function(unicode){
+  //         return unicodeChar(unicode);
+  //       },
+  //       SVGImageFromShortname: function(shortname){
+  //         return emojiIndex.emojis[shortname].unified;
+  //       },
+  //       PNGImageFromShortname: function(shortname){
+  //         var unicode = this.unicodeFromShortname(shortname);
+  //         return this.imageTemplate(unicode);
+  //       },
+  //       template: function (emoji) {
+  //         // Load emoji images one by one
+  //         return emoji.native +' '+emoji.colons;
+  //       },
+  //       replace: function (emoji) {
+  //         var unicode = emoji.unified;
+  //         return this.imageTemplate(unicode);
+  //       },
+  //       index: 1
+  //     }
+  //     ],{
+  //       zIndex: 1136,
+  //       maxCount: 20
+  //     })
+  //   .on({'textComplete:select': function (e, value, strategy) {
+  //     // This will make sure React inputs receive a change event
+  //     // after the textcompletion has inserted new contents
+  //     var event = new Event('input', { bubbles: true });
+  //     strategy.el.dispatchEvent(event);
+  //     }
+  //   })
+  // }
 };
+
+function emojiAutocomplete(elementOrSelector) {
+  let textEditors = [],
+      ret = [];
+  if (elementOrSelector.nodeType && elementOrSelector.nodeType === Node.ELEMENT_NODE) {
+    if (elementOrSelector.getAttribute("contenteditable")) {
+      textEditors.push(new ContentEditable(els[i]));
+    }
+  } else {
+    els = document.querySelectorAll(elementOrSelector);
+    for (let i = 0; i < els.length; i++) {
+      textEditors.push(new ContentEditable(els[i]));
+    }
+  }
+  if (textEditors.length) {
+    return emojiAutocompleteInner(textEditors);
+  }
+}
 
 export default emojiAutocomplete;

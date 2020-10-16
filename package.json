@@ -1,6 +1,6 @@
 {
   "name": "@bago2k4/emoji-autocomplete",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Uses textcomplete to show a list of suggestions using the EmojiMart index.",
   "main": "index.js",
   "scripts": {
@@ -22,8 +22,10 @@
   "author": "Iacopo Carraro",
   "license": "MIT",
   "dependencies": {
+    "@textcomplete/contenteditable": "^0.1.8",
+    "@textcomplete/textarea": "^0.1.8",
     "emoji-mart": "^2.2.1",
-    "jquery": "^2.1.4",
-    "jquery-textcomplete": "^1.8.4"
+    "react": "^16.14.0",
+    "textcomplete": "^0.18.2"
   }
 }
