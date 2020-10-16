@@ -2,9 +2,15 @@
 import {emojiIndex} from "emoji-mart";
 
 // import {default as TextArea} from "@textcomplete/contenteditable";
-import { Textcomplete } from "@textcomplete/core";
-import { ContenteditableEditor } from "@textcomplete/contenteditable";
-import { TextareaEditor } from "@textcomplete/textarea";
+import { Textcomplete as textcompletecore } from "@textcomplete/core";
+import { ContenteditableEditor as txtccontenteditor } from "@textcomplete/contenteditable";
+import { TextareaEditor as txtctextarea } from "@textcomplete/textarea";
+console.log("DBG @textcomplete/core", textcompletecore);
+console.log("DBG    Textcomplete", Textcomplete);
+console.log("DBG  @textcomplete/textarea", txtctextarea);
+console.log("DBG   TextareaEditor", TextareaEditor);
+console.log("DBG  @textcomplete/contenteditable", txtccontenteditor);
+console.log("DBG   ContenteditableEditor", ContenteditableEditor);
 
 function createHTMLUnicode(unicode){
   return "&#x"+unicode+";"
@@ -19,9 +25,10 @@ function unicodeChar(unicode){
 }
 
 function emojiAutocompleteInner(editors) {
+  console.log("DBG emojiAutocompleteInner", editors);
   editors.forEach(editor => {
-    var textComplete = new Textcomplete(editor);
-    textComplete.register([{
+    console.log("DBG   editor", editor);
+    var textComplete = new Textcomplete(editor, [{
       match: /\B:([\-+\w]{1,30})$/,
       search: function (term, callback) {
         callback(emojiIndex.search(term));
