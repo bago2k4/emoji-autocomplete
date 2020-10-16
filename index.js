@@ -1,9 +1,10 @@
 
 import {emojiIndex} from "emoji-mart";
 
-import ContentEditable from "@textcomplete/contenteditable";
-import {Textcomplete} from "textcomplete";
-
+// import {default as TextArea} from "@textcomplete/contenteditable";
+import { Textcomplete } from "@textcomplete/core";
+import { ContenteditableEditor } from "@textcomplete/contenteditable";
+import { TextareaEditor } from "@textcomplete/textarea";
 
 function createHTMLUnicode(unicode){
   return "&#x"+unicode+";"
@@ -104,12 +105,14 @@ function emojiAutocomplete(elementOrSelector) {
       ret = [];
   if (elementOrSelector.nodeType && elementOrSelector.nodeType === Node.ELEMENT_NODE) {
     if (elementOrSelector.getAttribute("contenteditable")) {
-      textEditors.push(new ContentEditable(els[i]));
+      textEditors.push(new ContenteditableEditor(els[i]));
+    }else if (elementOrSelector.nodeName.toLowerCase() === "textarea") {
+      textEditors.push(new TextareaEditor(els[i]));
     }
   } else {
     els = document.querySelectorAll(elementOrSelector);
     for (let i = 0; i < els.length; i++) {
-      textEditors.push(new ContentEditable(els[i]));
+      textEditors.push(new ContenteditableEditor(els[i]));
     }
   }
   if (textEditors.length) {
