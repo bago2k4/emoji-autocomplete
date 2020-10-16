@@ -1,20 +1,24 @@
 
 import {emojiIndex} from "emoji-mart";
+console.log("DBG emojiIndex", emojiIndex);
 
-// import {default as TextArea} from "@textcomplete/contenteditable";
-import { Textcomplete as textcompletecore } from "@textcomplete/core";
-import { ContenteditableEditor as txtccontenteditor } from "@textcomplete/contenteditable";
-import { TextareaEditor as txtctextarea } from "@textcomplete/textarea";
-console.log("DBG @textcomplete/core", textcompletecore);
-console.log("DBG    Textcomplete", Textcomplete);
-console.log("DBG  @textcomplete/textarea", txtctextarea);
-console.log("DBG   TextareaEditor", TextareaEditor);
-console.log("DBG  @textcomplete/contenteditable", txtccontenteditor);
-console.log("DBG   ContenteditableEditor", ContenteditableEditor);
+const { Textcomplete } = require("@textcomplete/core");
+console.log("DBG Textcomplete", Textcomplete);
+
+const { ContenteditableEditor } = require("@textcomplete/contenteditable");
+console.log("DBG ContenteditableEditor", ContenteditableEditor);
+
+const { TextareaEditor } = require("@textcomplete/textarea");
+console.log("DBG TextareaEditor", TextareaEditor);
+
+// import { Textcomplete as textcompletecore } from "@textcomplete/core";
+// import { ContenteditableEditor as txtccontenteditor } from "@textcomplete/contenteditable";
+// import { TextareaEditor as txtctextarea } from "@textcomplete/textarea";
 
 function createHTMLUnicode(unicode){
   return "&#x"+unicode+";"
 }
+
 function unicodeChar(unicode){
   if (unicode.indexOf("-") > -1){
     var unicodes = unicode.split("-");
@@ -107,21 +111,29 @@ function emojiAutocompleteInner(editors) {
   // }
 };
 
+function setupEditorWithElement(el) {
+  console.log("DBG setupEditorWithElement", el);
+  let editor;
+  if (el.getAttribute("contenteditable")) {
+    editor = new ContenteditableEditor(el);
+  }else if (el.nodeName.toLowerCase() === "textarea") {
+    editor = new TextareaEditor(el);
+  }
+  return editor;
+}
+
 function emojiAutocomplete(elementOrSelector) {
-  let textEditors = [],
-      ret = [];
+  console.log("DBG emojiAutocomplete", elementOrSelector);
+  let textEditors = [];
   if (elementOrSelector.nodeType && elementOrSelector.nodeType === Node.ELEMENT_NODE) {
-    if (elementOrSelector.getAttribute("contenteditable")) {
-      textEditors.push(new ContenteditableEditor(els[i]));
-    }else if (elementOrSelector.nodeName.toLowerCase() === "textarea") {
-      textEditors.push(new TextareaEditor(els[i]));
-    }
+    textEditors.push(setupEditorWithElement(elementOrSelector));
   } else {
     els = document.querySelectorAll(elementOrSelector);
     for (let i = 0; i < els.length; i++) {
-      textEditors.push(new ContenteditableEditor(els[i]));
+      textEditors.push(setupEditorWithElement(els[i]));
     }
   }
+  console.log("DBG set up elements:", textEditors);
   if (textEditors.length) {
     return emojiAutocompleteInner(textEditors);
   }
