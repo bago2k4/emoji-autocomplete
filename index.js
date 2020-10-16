@@ -2,13 +2,13 @@
 import {emojiIndex} from "emoji-mart";
 console.log("DBG emojiIndex", emojiIndex);
 
-const { Textcomplete } = require("@textcomplete/core");
+import { Textcomplete } from "@textcomplete/core";
 console.log("DBG Textcomplete", Textcomplete);
 
-const { ContenteditableEditor } = require("@textcomplete/contenteditable");
+import { ContenteditableEditor } from "@textcomplete/contenteditable";
 console.log("DBG ContenteditableEditor", ContenteditableEditor);
 
-const { TextareaEditor } = require("@textcomplete/textarea");
+import { TextareaEditor } from "@textcomplete/textarea";
 console.log("DBG TextareaEditor", TextareaEditor);
 
 // import { Textcomplete as textcompletecore } from "@textcomplete/core";
