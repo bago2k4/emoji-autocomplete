@@ -7,60 +7,48 @@ import { ContenteditableEditor } from "@textcomplete/contenteditable";
 
 import { TextareaEditor } from "@textcomplete/textarea";
 
-console.log("DBG emojiIndex", emojiIndex);
-console.log("DBG Textcomplete", Textcomplete);
-console.log("DBG ContenteditableEditor", ContenteditableEditor);
-console.log("DBG TextareaEditor", TextareaEditor);
-
 // import { Textcomplete as textcompletecore } from "@textcomplete/core";
 // import { ContenteditableEditor as txtccontenteditor } from "@textcomplete/contenteditable";
 // import { TextareaEditor as txtctextarea } from "@textcomplete/textarea";
 
-function createHTMLUnicode(unicode){
-  return "&#x"+unicode+";";
-}
+// function createHTMLUnicode(unicode){
+//   return "&#x"+unicode+";";
+// }
 
-function unicodeChar(unicode){
-  if (unicode.indexOf("-") > -1){
-    var unicodes = unicode.split("-");
-    return encodeURI(unicodes.map(createHTMLUnicode).join(""));
-  } else {
-    return encodeURI(createHTMLUnicode(unicode));
-  }
-}
+// function unicodeChar(unicode){
+//   if (unicode.indexOf("-") > -1){
+//     var unicodes = unicode.split("-");
+//     return encodeURI(unicodes.map(createHTMLUnicode).join(""));
+//   } else {
+//     return encodeURI(createHTMLUnicode(unicode));
+//   }
+// }
 
 function emojiAutocompleteInner(editors) {
-  console.log("DBG emojiAutocompleteInner", editors);
-  editors.forEach(editor => {
-    console.log("DBG   editor", editor);
-    var textComplete = new Textcomplete(editor, [{
+  return editors.map(editor => {
+    var txtComp = new Textcomplete(editor, [{
       match: /\B:([\-+\w]{1,30})$/,
       search: function (term, callback) {
         callback(emojiIndex.search(term));
       },
-      unicodeFromShortname: function(shortname){
-        return emojiIndex.emojis[shortname].unified;
-      },
-      imageTemplate: function(unicode){
-        return unicodeChar(unicode);
-      },
-      SVGImageFromShortname: function(shortname){
-        return emojiIndex.emojis[shortname].unified;
-      },
-      PNGImageFromShortname: function(shortname){
-        var unicode = this.unicodeFromShortname(shortname);
-        return this.imageTemplate(unicode);
-      },
+      // unicodeFromShortname: function(shortname){
+      //   return emojiIndex.emojis[shortname].unified;
+      // },
+      // imageTemplate: function(unicode){
+      //   return unicodeChar(unicode);
+      // },
+      // SVGImageFromShortname: function(shortname){
+      //   return emojiIndex.emojis[shortname].unified;
+      // },
+      // PNGImageFromShortname: function(shortname){
+      //   var unicode = this.unicodeFromShortname(shortname);
+      //   return this.imageTemplate(unicode);
+      // },
       template: function (emoji) {
-        // Load emoji images one by one
         return emoji.native +' '+emoji.colons;
       },
       replace: function (emoji) {
-        // return emoji.native;
-        console.log("DBG replace", emoji);
-        console.log("DBG   emoji.unified", emoji.unified);
-        console.log("DBG   imageTemplate", this.imageTemplate(emoji.unified));
-        return this.imageTemplate(emoji.unified);
+        return emoji.native;
       },
       index: 1
     }],
@@ -69,15 +57,15 @@ function emojiAutocompleteInner(editors) {
       style: {zIndex: 1136},
       maxCount: 20
     }});
-    textComplete.on("select", (e)=>{
+    txtComp.on("select", (e)=>{
       let event = new Event("input", {bubbles: true});
       editor.el.dispatchEvent(event);
-    })
+    });
+    return txtComp;
   });
 }
 
 function setupEditorWithElement(el) {
-  console.log("DBG setupEditorWithElement", el);
   let editor;
   if (el.getAttribute("contenteditable")) {
     editor = new ContenteditableEditor(el);
@@ -88,7 +76,6 @@ function setupEditorWithElement(el) {
 }
 
 function emojiAutocomplete(elementOrSelector) {
-  console.log("DBG emojiAutocomplete", elementOrSelector);
   let textEditors = [];
   if (elementOrSelector.nodeType && elementOrSelector.nodeType === Node.ELEMENT_NODE) {
     textEditors.push(setupEditorWithElement(elementOrSelector));
@@ -98,7 +85,6 @@ function emojiAutocomplete(elementOrSelector) {
       textEditors.push(setupEditorWithElement(els[i]));
     }
   }
-  console.log("DBG set up elements:", textEditors);
   if (textEditors.length) {
     return emojiAutocompleteInner(textEditors);
   }
