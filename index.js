@@ -56,8 +56,11 @@ function emojiAutocompleteInner(editors) {
         return emoji.native +' '+emoji.colons;
       },
       replace: function (emoji) {
-        var unicode = emoji.unified;
-        return this.imageTemplate(unicode);
+        // return emoji.native;
+        console.log("DBG replace", emoji);
+        console.log("DBG   emoji.unified", emoji.unified);
+        console.log("DBG   imageTemplate", this.imageTemplate(emoji.unified));
+        return this.imageTemplate(emoji.unified);
       },
       index: 1
     }],
