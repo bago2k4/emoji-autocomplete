@@ -1,14 +1,15 @@
 
 import {emojiIndex} from "emoji-mart";
-console.log("DBG emojiIndex", emojiIndex);
 
 import { Textcomplete } from "@textcomplete/core";
-console.log("DBG Textcomplete", Textcomplete);
 
 import { ContenteditableEditor } from "@textcomplete/contenteditable";
-console.log("DBG ContenteditableEditor", ContenteditableEditor);
 
 import { TextareaEditor } from "@textcomplete/textarea";
+
+console.log("DBG emojiIndex", emojiIndex);
+console.log("DBG Textcomplete", Textcomplete);
+console.log("DBG ContenteditableEditor", ContenteditableEditor);
 console.log("DBG TextareaEditor", TextareaEditor);
 
 // import { Textcomplete as textcompletecore } from "@textcomplete/core";
@@ -16,14 +17,14 @@ console.log("DBG TextareaEditor", TextareaEditor);
 // import { TextareaEditor as txtctextarea } from "@textcomplete/textarea";
 
 function createHTMLUnicode(unicode){
-  return "&#x"+unicode+";"
+  return "&#x"+unicode+";";
 }
 
 function unicodeChar(unicode){
   if (unicode.indexOf("-") > -1){
     var unicodes = unicode.split("-");
     return encodeURI(unicodes.map(createHTMLUnicode).join(""));
-  }else{
+  } else {
     return encodeURI(createHTMLUnicode(unicode));
   }
 }
@@ -60,56 +61,17 @@ function emojiAutocompleteInner(editors) {
       },
       index: 1
     }],
-    {
-      zIndex: 1136,
+    {dropdown: {
+      className: "emoji-autocomplete-menu textcomplete-dropdown dropdown-menu",
+      style: {zIndex: 1136},
       maxCount: 20
-    });
+    }});
+    textComplete.on("select", (e)=>{
+      let event = new Event("input", {bubbles: true});
+      editor.el.dispatchEvent(event);
+    })
   });
-
-
-  // if (typeof elementOrSelectorel === "string" ||
-  //     (elementOrSelector && elementOrSelector.nodeType && elementOrSelector.nodeType === Node.ELEMENT_NODE)) {
-  //   $(elementOrSelector).textcomplete([ {
-  //       match: /\B:([\-+\w]{1,30})$/,
-  //       search: function (term, callback) {
-  //         callback(emojiIndex.search(term));
-  //       },
-  //       unicodeFromShortname: function(shortname){
-  //         return emojiIndex.emojis[shortname].unified;
-  //       },
-  //       imageTemplate: function(unicode){
-  //         return unicodeChar(unicode);
-  //       },
-  //       SVGImageFromShortname: function(shortname){
-  //         return emojiIndex.emojis[shortname].unified;
-  //       },
-  //       PNGImageFromShortname: function(shortname){
-  //         var unicode = this.unicodeFromShortname(shortname);
-  //         return this.imageTemplate(unicode);
-  //       },
-  //       template: function (emoji) {
-  //         // Load emoji images one by one
-  //         return emoji.native +' '+emoji.colons;
-  //       },
-  //       replace: function (emoji) {
-  //         var unicode = emoji.unified;
-  //         return this.imageTemplate(unicode);
-  //       },
-  //       index: 1
-  //     }
-  //     ],{
-  //       zIndex: 1136,
-  //       maxCount: 20
-  //     })
-  //   .on({'textComplete:select': function (e, value, strategy) {
-  //     // This will make sure React inputs receive a change event
-  //     // after the textcompletion has inserted new contents
-  //     var event = new Event('input', { bubbles: true });
-  //     strategy.el.dispatchEvent(event);
-  //     }
-  //   })
-  // }
-};
+}
 
 function setupEditorWithElement(el) {
   console.log("DBG setupEditorWithElement", el);
