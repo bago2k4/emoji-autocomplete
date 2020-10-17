@@ -7,23 +7,6 @@ import { ContenteditableEditor } from "@textcomplete/contenteditable";
 
 import { TextareaEditor } from "@textcomplete/textarea";
 
-// import { Textcomplete as textcompletecore } from "@textcomplete/core";
-// import { ContenteditableEditor as txtccontenteditor } from "@textcomplete/contenteditable";
-// import { TextareaEditor as txtctextarea } from "@textcomplete/textarea";
-
-// function createHTMLUnicode(unicode){
-//   return "&#x"+unicode+";";
-// }
-
-// function unicodeChar(unicode){
-//   if (unicode.indexOf("-") > -1){
-//     var unicodes = unicode.split("-");
-//     return encodeURI(unicodes.map(createHTMLUnicode).join(""));
-//   } else {
-//     return encodeURI(createHTMLUnicode(unicode));
-//   }
-// }
-
 function emojiAutocompleteInner(editors) {
   return editors.map(editor => {
     var txtComp = new Textcomplete(editor, [{
@@ -31,19 +14,6 @@ function emojiAutocompleteInner(editors) {
       search: function (term, callback) {
         callback(emojiIndex.search(term));
       },
-      // unicodeFromShortname: function(shortname){
-      //   return emojiIndex.emojis[shortname].unified;
-      // },
-      // imageTemplate: function(unicode){
-      //   return unicodeChar(unicode);
-      // },
-      // SVGImageFromShortname: function(shortname){
-      //   return emojiIndex.emojis[shortname].unified;
-      // },
-      // PNGImageFromShortname: function(shortname){
-      //   var unicode = this.unicodeFromShortname(shortname);
-      //   return this.imageTemplate(unicode);
-      // },
       template: function (emoji) {
         return emoji.native +' '+emoji.colons;
       },
