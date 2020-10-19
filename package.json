@@ -25,7 +25,7 @@
     "@textcomplete/contenteditable": "^0.1.8",
     "@textcomplete/core": "^0.1.8",
     "@textcomplete/textarea": "^0.1.8",
-    "emoji-mart": "^2.2.1",
+    "emoji-mart": "^3.0.0",
     "react": "^16.14.0"
   }
 }
