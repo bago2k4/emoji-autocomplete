@@ -67,19 +67,19 @@ function emojiAutocomplete(elementOrSelector) {
 }
 
 function destroy(txtEditors) {
-  if (txtEditors) {
-    if ()
-    txtEditor.destroy();
-  }
-
+  console.debug("Destroying TextComplete editors:", txtEditors);
   if (txtEditors.destroy) {
     txtEditors.destroy();
+    console.debug("Destroyed editor.");
   } else {
     for (let i = 0; i < txtEditors.length; i++) {
       txtEditors[i].destroy();
+      console.debug(`Destroyed ${i} editor:`, txtEditors[i]);
     }
   }
+  console.debug("Destroyed all editors.");
   return true;
 }
 
+export default destroy;
 export default emojiAutocomplete;
