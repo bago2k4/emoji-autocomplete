@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <script type="module" src="../dist/main.js"></script>
+    <style type="text/css">
+      div.my-editor {
+        border: 1px solid #bbb;
+        border-radius: 4px;
+        padding: 8px;
+        margin-bottom: 16px;
+      }
+
+      button.dest-bt {
+        margin-left: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <label>Type `:` and then a letter to test the emoji autocomplete:</label>
+    <div class="my-editor" contenteditable="plaintext-only">
+      Try it here
+    </div>
+    <button class="my-bt">Start</button>
+    <br />
+    <label class="my-count-label"></label>
+  </body>
+</html>

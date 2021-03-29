@@ -7,79 +7,79 @@ import { ContenteditableEditor } from "@textcomplete/contenteditable";
 
 import { TextareaEditor } from "@textcomplete/textarea";
 
-function emojiAutocompleteInner(editors) {
-  return editors.map(editor => {
-    let txtComp = new Textcomplete(editor, [{
-        match: /\B:([\-+\w]{1,30})$/,
-        search: (term, callback) => callback(emojiIndex.search(term)),
-        template: emoji => `${emoji.native} ${emoji.colons}`,
-        replace: emoji => emoji.native,
-        index: 1
-      }],
-      {dropdown: {
-       className: "emoji-autocomplete-menu textcomplete-dropdown dropdown-menu",
-       style: {zIndex: 1136},
-       maxCount: 20
-    }});
+function editorWithAutocomplete(editor) {
+  let txtComp = new Textcomplete(editor, [{
+      match: /\B:([\-+\w]{1,30})$/,
+      search: (term, callback) => callback(emojiIndex.search(term)),
+      template: emoji => `${emoji.native} ${emoji.colons}`,
+      replace: emoji => emoji.native,
+      index: 1
+    }],
+    {
+      dropdown: {
+        className: "emoji-autocomplete-menu textcomplete-dropdown dropdown-menu",
+        style: {zIndex: 1136},
+        maxCount: 20
+      }
+    }
+  );
 
-    txtComp.on("select", (inEvent) => {
-      console.debug(`TextComplete did select`, inEvent.target);
-      let outEvent = new Event("input", {bubbles: true});
-      editor.el.dispatchEvent(outEvent);
-    });
-    return txtComp;
+  txtComp.on("select", (inEvent) => {
+    let outEvent = new Event("input", {bubbles: true});
+    editor.el.dispatchEvent(outEvent);
   });
+
+  return txtComp;
 }
 
 function setupEditorWithElement(el) {
-  console.debug(`Setup TextComplete on element:`, el);
   let editor;
   if (!el) {
     console.error(`Can't initialize EmojiAutocopmlete on undefined element: ${el}`)
-    return editor;
-  }
-  if (el.getAttribute("contenteditable")) {
-    console.debug(`Initializing EmojiAutocomplete on ${el.tagName} element:`, el);
+  } else if (el.getAttribute("contenteditable")) {
+    console.debug("Init ContenteditableEditor on", el);
     editor = new ContenteditableEditor(el);
   } else if (el.nodeName.toLowerCase() === "textarea") {
-    console.debug(`Initializing EmojiAutocomplete on TEXTAREA element:`, el);
+    console.debug("Init TextareaEditor on", el);
     editor = new TextareaEditor(el);
   } else {
     console.warn(`Element of type ${el.tagName} not supported`)
   }
-  return editor;
+  return editorWithAutocomplete(editor);
 }
 
-function emojiAutocomplete(elementOrSelector) {
-  console.debug(`emojiAutocomplete called:`, elementOrSelector);
-  let textEditors = [];
+function initializeTextCompleteEditors(elementOrSelector) {
   if (elementOrSelector.nodeType && elementOrSelector.nodeType === Node.ELEMENT_NODE) {
-    textEditors.push(setupEditorWithElement(elementOrSelector));
+    return setupEditorWithElement(elementOrSelector);
+  } else if (typeof elementOrSelector === "string") {
+    let els = document.querySelectorAll(elementOrSelector);
+    return initializeTextCompleteEditors(els);
   } else {
-    const els = document.querySelectorAll(elementOrSelector);
-    for (let i = 0; i < els.length; i++) {
-      textEditors.push(setupEditorWithElement(els[i]));
+    let editors = [];
+    for (let i = 0; i < elementOrSelector.length; i++) {
+      editors.push(setupEditorWithElement(elementOrSelector[i]));
     }
-  }
-  if (textEditors.length) {
-    return emojiAutocompleteInner(textEditors);
+    return editors;
   }
 }
 
-function destroy(txtEditors) {
-  console.debug("Destroying TextComplete editors:", txtEditors);
+export function setupAutocomplete(elementOrSelector) {
+  console.debug("Initializing emojiAutocomplete with", elementOrSelector);
+  let textEditors = initializeTextCompleteEditors(elementOrSelector);
+  console.debug(`Initialized ${textEditors.length} editors`);
+  return textEditors;
+}
+
+export function destroyAutocomplete(txtEditors) {
+  console.debug("Destroying emojiAutocomplete:", txtEditors);
   if (txtEditors.destroy) {
     txtEditors.destroy();
-    console.debug("Destroyed editor.");
   } else {
     for (let i = 0; i < txtEditors.length; i++) {
-      txtEditors[i].destroy();
-      console.debug(`Destroyed ${i} editor:`, txtEditors[i]);
+      if (txtEditors[i].destroy) {
+        txtEditors[i].destroy();
+      }
     }
   }
-  console.debug("Destroyed all editors.");
   return true;
 }
-
-export default destroy;
-export default emojiAutocomplete;

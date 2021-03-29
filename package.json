@@ -3,6 +3,7 @@
   "version": "1.0.5",
   "description": "Uses textcomplete to show a list of suggestions using the EmojiMart index.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -25,6 +26,8 @@
     "@textcomplete/contenteditable": "^0.1.9",
     "@textcomplete/core": "^0.1.9",
     "@textcomplete/textarea": "^0.1.9",
-    "emoji-mart": "^3.0.1"
+    "emoji-mart": "^3.0.1",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
   }
 }
