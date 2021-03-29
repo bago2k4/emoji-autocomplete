@@ -66,4 +66,20 @@ function emojiAutocomplete(elementOrSelector) {
   }
 }
 
+function destroy(txtEditors) {
+  if (txtEditors) {
+    if ()
+    txtEditor.destroy();
+  }
+
+  if (txtEditors.destroy) {
+    txtEditors.destroy();
+  } else {
+    for (let i = 0; i < txtEditors.length; i++) {
+      txtEditors[i].destroy();
+    }
+  }
+  return true;
+}
+
 export default emojiAutocomplete;
