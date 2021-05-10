@@ -8,7 +8,7 @@
     "build": "npx webpack --config webpack.config.js",
     "watch-build": "npx webpack --config webpack.config.js -w",
     "build-details": "npx webpack --config webpack.config.js --stats-error-details",
-    "http-start": "http-server -p 8011 ."
+    "http-server": "http-server -p 8011 ."
   },
   "dependencies": {
     "@bago2k4/emoji-autocomplete": "github:bago2k4/emoji-autocomplete#debug",
