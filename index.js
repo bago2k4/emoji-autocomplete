@@ -19,7 +19,8 @@ function editorWithAutocomplete(editor) {
       dropdown: {
         className: "emoji-autocomplete-menu textcomplete-dropdown dropdown-menu",
         style: {zIndex: 1136},
-        maxCount: 20
+        maxCount: 20,
+        rotate: true
       }
     }
   );
@@ -27,6 +28,13 @@ function editorWithAutocomplete(editor) {
   txtComp.on("select", (inEvent) => {
     let outEvent = new Event("input", {bubbles: true});
     editor.el.dispatchEvent(outEvent);
+  });
+
+  // On click out of the dropdown listener
+  window.addEventListener("click", (event) => {
+    if ( txtComp.dropdown.isShown() && !txtComp.dropdown.el.contains(event.target) ) {
+      txtComp.hide();
+    }
   });
 
   return txtComp;
